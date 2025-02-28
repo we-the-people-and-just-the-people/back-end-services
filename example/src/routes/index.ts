@@ -13,7 +13,7 @@ router
  * This function sets the response to a simple test.
  *
  * @param {Context} ctx - The context of the request.
- * @param {Next} next - The next function to be executed.ss
+ * @param {Next} next - The next function to be executed.
  */
 async function helloWorld(ctx: Context, next: Next) {
     ctx.response.body = {
