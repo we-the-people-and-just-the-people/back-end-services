@@ -39,7 +39,11 @@ jobs:
       matrix:
         dir: ${{ fromJSON(needs.gather-changed-directories.outputs.dirs) }}
     
+    
     steps:
+      - name: Change Directory
+        run: cd ${{ matrix.dir }}  
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -48,9 +52,6 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-
-      - name: Change Directory
-        run: cd ${{ matrix.dir }}
 
       - name: Run tests for changed services
         run: |
