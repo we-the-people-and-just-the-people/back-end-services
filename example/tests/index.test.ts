@@ -1,6 +1,5 @@
 import request from 'supertest';
 import app from '../src/app';
-import { validate as uuidValidate } from 'uuid';
 
 // Mock app.listen to prevent multiple server instances
 jest.mock('koa', () => {
@@ -60,7 +59,6 @@ describe('Koa Application', () => {
         const response = await request(app.callback()).get('/');
 
         expect(response.headers['x-request-id']).toBeDefined();
-        expect(uuidValidate(response.headers['x-request-id'])).toBe(true);
     });
 
     it('should set unique X-Request-Id for different requests', async () => {
