@@ -16,7 +16,7 @@ router
  * @param {Next} next - The next function to be executed.
  */
 async function helloWorld(ctx: Context, next: Next) {
-    ctx.response.body = {
+    ctx.body = {
         message: 'Hello World',
     };
 
@@ -30,7 +30,7 @@ async function helloWorld(ctx: Context, next: Next) {
  * @param {Next} next - The next function to be executed.
  */
 async function helloWorldFromPath(ctx: Context, next: Next) {
-    ctx.response.body = {
+    ctx.body = {
         message: `Hello World from ${ctx.request.path}`,
     };
 

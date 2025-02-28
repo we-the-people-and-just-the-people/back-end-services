@@ -1,5 +1,6 @@
 import Koa from 'koa';
 import bodyParser from '@koa/bodyparser';
+import { v4 as uuidv4 } from 'uuid';
 
 import indexRouter from './routes/index';
 
@@ -15,8 +16,17 @@ app.use(async (ctx, next) => {
     ctx.set('X-Response-Time', `${ms}ms`);
 });
 
+// request id
 
-// response
+app.use(async (ctx, next) => {
+    if (!ctx.get('X-Request-Id')) {
+        ctx.set('X-Request-Id', uuidv4());
+    }
+    next();
+});
+
+
+// routes
 
 app.use(indexRouter.routes());
 app.use(indexRouter.allowedMethods());
@@ -25,13 +35,15 @@ app.use(indexRouter.allowedMethods());
 // logger
 
 app.use(async (ctx, next) => {
+    console.log(ctx)
+
     await next();
 
-    console.log(ctx);
+    console.log(ctx.response);
 });
 
 process.on('SIGINT', async () => {
-    console.log('Goodbye!');
+    console.log('Time to shut down gracefully!');
     process.exit(0);
 });
 
