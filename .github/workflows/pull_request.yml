@@ -41,11 +41,13 @@ jobs:
     
     
     steps:
-      - name: Change Directory
-        run: cd ${{ matrix.dir }}  
+        
 
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Change Directory
+        run: cd ${{ matrix.dir }}  
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
