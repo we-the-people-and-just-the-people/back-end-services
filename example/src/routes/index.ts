@@ -34,7 +34,7 @@ async function helloWorldFromPath(ctx: Context, next: Next) {
         message: `Hello World from ${ctx.request.path}`,
     };
 
-    next();
+    await next();
 }
 
 export default router;
