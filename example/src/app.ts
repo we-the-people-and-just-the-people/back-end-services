@@ -32,23 +32,7 @@ app.use(indexRouter.routes());
 app.use(indexRouter.allowedMethods());
 
 
-// logger
-
-// app.use(async (ctx, next) => {
-//     await next();
-
-//     console.log({
-//         request: ctx.request,
-//         response: ctx.response,
-//         requestId: ctx.response.get('X-Request-Id'),
-//     })
-
-//     ctx.log.info({
-//         request: ctx.request,
-//         response: ctx.response,
-//         requestId: ctx.response.get('X-Request-Id'),
-//     });
-// });
+// server
 
 process.on('SIGINT', async () => {
     console.log('Time to shut down gracefully!');
