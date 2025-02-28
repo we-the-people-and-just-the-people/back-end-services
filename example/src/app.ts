@@ -1,6 +1,5 @@
 import Koa from 'koa';
 import bodyParser from '@koa/bodyparser';
-import { v4 as uuidv4 } from 'uuid';
 import koaBunyanLogger from 'koa-bunyan-logger';
 
 import indexRouter from './routes/index';
