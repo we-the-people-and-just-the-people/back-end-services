@@ -20,7 +20,7 @@ async function helloWorld(ctx: Context, next: Next) {
         message: 'Hello World',
     };
 
-    next();
+    await next();
 }
 
 /**
