@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "@koa/bodyparser": "^5.1.1",
+    "koa": "^2.16.0",
+    "koa-router": "^13.0.1"
+  },
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.8",
+    "@types/jest": "^29.5.14",
+    "@types/koa": "^2.15.0",
+    "@types/koa-logger": "^3.1.5",
+    "@types/koa-router": "^7.4.8",
+    "@types/node": "^22.13.5",
+    "@types/supertest": "^6.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.6",
+    "typescript": "^5.7.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "dev": "tsc -w",
+    "test": "npm run build && jest"
+  },
+  "main": "dist/app.js",
+  "engines": {
+    "node": ">=22",
+    "npm": ">=10"
+  }
+}
