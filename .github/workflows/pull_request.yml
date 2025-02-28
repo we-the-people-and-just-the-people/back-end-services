@@ -2,7 +2,7 @@ name: Run Unit Tests
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   gather-changed-directories:
@@ -11,25 +11,25 @@ jobs:
       dirs: ${{ steps.changed-dirs.outputs.dirs }}
 
     steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
-          with:
-            fetch-depth: 0  # Needed to get all history for comparing changes
-            
-        - name: Get changed directories with Dockerfiles
-          id: changed-dirs
-          
-          run: |
-            # Get base branch (target of PR)
-            BASE_BRANCH=${{ github.base_ref }}
-            
-            # Find directories that changed and contain Dockerfiles
-            CHANGED_DIRS=$(git diff --name-only origin/$BASE_BRANCH...HEAD | xargs -I{} dirname {} | sort | uniq | xargs -I{} bash -c 'if [ -f "{}"/Dockerfile ]; then echo "{}"; fi')
-            
-            # Format as JSON array for next steps
-            JSON_DIRS=$(echo "$CHANGED_DIRS" | jq -R -s -c 'split("\n") | map(select(length > 0))')
-            echo "Found directories with Dockerfiles: $JSON_DIRS"
-            echo "dirs=$JSON_DIRS" >> $GITHUB_OUTPUT
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Needed to get all history for comparing changes
+
+      - name: Get changed directories with Dockerfiles
+        id: changed-dirs
+
+        run: |
+          # Get base branch (target of PR)
+          BASE_BRANCH=${{ github.base_ref }}
+
+          # Find directories that changed and contain Dockerfiles
+          CHANGED_DIRS=$(git diff --name-only origin/$BASE_BRANCH...HEAD | xargs -I{} dirname {} | sort | uniq | xargs -I{} bash -c 'if [ -f "{}"/Dockerfile ]; then echo "{}"; fi')
+
+          # Format as JSON array for next steps
+          JSON_DIRS=$(echo "$CHANGED_DIRS" | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "Found directories with Dockerfiles: $JSON_DIRS"
+          echo "dirs=$JSON_DIRS" >> $GITHUB_OUTPUT
 
   test-changed-services:
     runs-on: ubuntu-latest
@@ -38,13 +38,13 @@ jobs:
     strategy:
       matrix:
         dir: ${{ fromJSON(needs.gather-changed-directories.outputs.dirs) }}
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Change Directory
-        run: | 
-            cd ${{ matrix.dir }} && pwd && ls
-            npm install
-            npm run test
+        run: |
+          cd ${{ matrix.dir }} && pwd && ls
+          npm install
+          npm run test
