@@ -1,4 +1,4 @@
-name: Test Dockerized Services
+name: Run Unit Tests
 
 on:
   pull_request:
@@ -46,14 +46,8 @@ jobs:
       - name: Change Directory
         run: cd ${{ matrix.dir }} && pwd && ls
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
 
-      - name: Run tests for changed services
-        run: |
-            # Install dependencies and run tests
-            npm install
-            npm run test
+      - name: Run unit tests
+        run: npm test
