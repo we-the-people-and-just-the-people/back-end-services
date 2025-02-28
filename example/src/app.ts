@@ -22,7 +22,7 @@ app.use(async (ctx, next) => {
     if (!ctx.get('X-Request-Id')) {
         ctx.set('X-Request-Id', uuidv4());
     }
-    next();
+    await next();
 });
 
 
