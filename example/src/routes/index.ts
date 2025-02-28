@@ -20,6 +20,8 @@ async function helloWorld(ctx: Context, next: Next) {
         message: 'Hello World',
     };
 
+    ctx.log.info("This is a log message from the helloWorld function.");
+
     await next();
 }
 
@@ -33,6 +35,8 @@ async function helloWorldFromPath(ctx: Context, next: Next) {
     ctx.body = {
         message: `Hello World from ${ctx.request.path}`,
     };
+
+    ctx.log.info("This is a log message from the helloWorldFromPath function.");
 
     await next();
 }

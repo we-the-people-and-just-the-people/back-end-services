@@ -1,28 +1,29 @@
 import Koa from 'koa';
 import bodyParser from '@koa/bodyparser';
 import { v4 as uuidv4 } from 'uuid';
+import koaBunyanLogger from 'koa-bunyan-logger';
 
 import indexRouter from './routes/index';
 
-const app = new Koa();
-app.use(bodyParser());
 
-// x-response-time
+const app = new Koa();
+app.use(koaBunyanLogger());
+app.use(bodyParser());
+app.use(koaBunyanLogger.requestIdContext());
+app.use(koaBunyanLogger.requestLogger());
+
+// useful headers
 
 app.use(async (ctx, next) => {
     const start = Date.now();
+
+    ctx.set('X-Request-Id', ctx.log.fields.req_id);
+    ctx.set('X-Request-Timestamp', new Date().toISOString());
+
     await next();
+
     const ms = Date.now() - start;
     ctx.set('X-Response-Time', `${ms}ms`);
-});
-
-// request id
-
-app.use(async (ctx, next) => {
-    if (!ctx.get('X-Request-Id')) {
-        ctx.set('X-Request-Id', uuidv4());
-    }
-    await next();
 });
 
 
@@ -34,13 +35,21 @@ app.use(indexRouter.allowedMethods());
 
 // logger
 
-app.use(async (ctx, next) => {
-    console.log(ctx)
+// app.use(async (ctx, next) => {
+//     await next();
 
-    await next();
+//     console.log({
+//         request: ctx.request,
+//         response: ctx.response,
+//         requestId: ctx.response.get('X-Request-Id'),
+//     })
 
-    console.log(ctx.response);
-});
+//     ctx.log.info({
+//         request: ctx.request,
+//         response: ctx.response,
+//         requestId: ctx.response.get('X-Request-Id'),
+//     });
+// });
 
 process.on('SIGINT', async () => {
     console.log('Time to shut down gracefully!');
