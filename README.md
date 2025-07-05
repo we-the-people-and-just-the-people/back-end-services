@@ -130,12 +130,25 @@ The service will be available at `http://localhost:3000`
 
 ## CI/CD Pipeline
 
-The GitHub Actions workflow automatically:
+The GitHub Actions workflows automatically:
 
+### Pull Request Workflow
 1. Triggers on pull requests to main
 2. Installs dependencies
 3. Runs tests
 4. Builds the Docker image (on merge to main)
+
+### Release Workflow
+1. Triggers on semantic version tags (e.g., `v1.0.0`, `v2.1.3`)
+2. Installs dependencies and builds the project
+3. Runs tests to ensure quality
+4. Automatically creates a GitHub release with changelog
+
+To create a new release:
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
 
 ## License
 
