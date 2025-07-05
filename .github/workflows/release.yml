@@ -1,0 +1,51 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: |
+            ## Changes in ${{ github.ref_name }}
+            
+            This release was automatically created from the git tag ${{ github.ref_name }}.
+            
+            ### What's Changed
+            - See the commit history for detailed changes since the last release
+            
+            **Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ github.ref_name }}...HEAD
+          draft: false
+          prerelease: false
