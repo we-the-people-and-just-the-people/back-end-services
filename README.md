@@ -130,12 +130,14 @@ The service will be available at `http://localhost:3000`
 
 ## CI/CD Pipeline
 
-The GitHub Actions workflow automatically:
+The GitHub Actions workflows automatically:
 
-1. Triggers on pull requests to main
-2. Installs dependencies
-3. Runs tests
-4. Builds the Docker image (on merge to main)
+1. **Pull Request Workflow**: Triggers on pull requests to main
+   - Installs dependencies
+   - Runs tests
+2. **Docker Build Workflow**: Triggers on push to main
+   - Builds the application
+   - Builds and pushes Docker image to ghcr.io
 
 ## License
 
