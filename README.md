@@ -1,104 +1,142 @@
-# We The People and Just The People - Microservice Architecture
+# We The People and Just The People - Backend Service Example
 
-This project implements a microservice architecture where each service is contained in its own directory and deployed independently. An application load balancer routes traffic to the appropriate microservice based on the URL path.
+This is a single microservice built with Node.js, TypeScript, and Koa framework. It serves as an example backend service for the We The People and Just The People project.
 
-## Architecture Overview
+## Features
 
-```mermaid
-flowchart TD
-    Client["Client Requests"] -->|HTTP requests| ALB["Application Load Balancer"]
-    ALB -->|"/example/*"| Example["Example Service Container"]
-    ALB -->|"/service-a/*"| ServiceA["Service A Container"]
-    ALB -->|"/service-b/*"| ServiceB["Service B Container"]
-```
+This service includes:
 
-## How It Works
-
-- **URL-based Routing**: The load balancer routes requests based on URL paths
-  - Example: `/example` routes to the example service's `/` endpoint
-  - Example: `/example/users` routes to the example service's `/users` endpoint
-  - Example: `/service-a/orders` routes to service-a's `/orders` endpoint
-
-- **Independent Deployment**: Each microservice is containerized and deployed separately
-  - Updates to one service don't require redeploying other services
+- [Koa](https://koajs.com/) web framework
+- TypeScript configuration
+- Request ID middleware
+- Response time tracking
+- Graceful shutdown handling
+- Jest testing setup with supertest
+- GitHub Actions CI/CD pipeline
+- Docker containerization
 
 ## Directory Structure
 
 ```
-back-end-services/
-├── example/             # Example microservice template
-├── service-a/           # Another microservice
-├── service-b/           # Another microservice
-├── .github/workflows/   # CI/CD workflows
-└── README.md            # This file
+backend-service-example/
+├── src/                    # Source code
+│   ├── app.ts              # Main application entry point
+│   └── routes/             # API route definitions
+│       └── index.ts        # Default routes
+├── tests/                  # Test files
+│   └── index.test.ts       # Main app tests
+├── .github/workflows/      # CI/CD workflows
+├── Dockerfile              # Container definition
+├── package.json            # Dependencies and scripts
+├── tsconfig.json           # TypeScript configuration
+├── jest.config.js          # Jest testing configuration
+└── README.md               # This file
 ```
 
-## Creating a New Microservice
+## Getting Started
 
-1. Copy the `example` directory to create a new service:
+### Prerequisites
+
+- Node.js >= 20
+- npm >= 10
+
+### Installation
+
+1. Clone the repository:
    ```bash
-   cp -r example my-new-service
+   git clone https://github.com/we-the-people-and-just-the-people/back-end-service-example.git
+   cd back-end-service-example
    ```
 
-2. Update the package.json, README, and code in the new directory
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-3. Implement your service logic in the `src` directory
+### Available Scripts
 
-4. Deploy your service (see Deployment section)
+```bash
+# Install dependencies
+npm install
 
-5. Configure the load balancer to route `/my-new-service/*` traffic to your service
+# Build the project (transpile TypeScript)
+npm run build
+
+# Start the service
+npm start
+
+# Development mode (watch for changes)
+npm run dev
+
+# Run tests
+npm run test
+```
 
 ## Development Workflow
 
-Each microservice follows its own development lifecycle:
-
 1. Clone the repository
-2. Navigate to your service directory
-3. Install dependencies: `npm install`
-4. Make code changes
-5. Run tests: `npm test`
-6. Submit PR for review
+2. Install dependencies: `npm install`
+3. Make code changes in the `src/` directory
+4. Run tests: `npm test`
+5. Submit PR for review
+
+## API Endpoints
+
+The service provides the following endpoints:
+
+- `GET /` - Returns a simple "Hello World" message
+- `GET /hello` - Returns a "Hello World" message with the request path
+
+## Testing
+
+Tests are located in the `tests/` directory and use Jest as the testing framework, with supertest for API testing.
+
+```bash
+npm run test
+```
 
 ## Deployment
 
-Each microservice is containerized using Docker:
+### Docker
 
-1. Build the service image:
+1. Build the Docker image:
    ```bash
-   cd my-service
-   docker build -t my-service .
+   docker build -t backend-service-example .
    ```
 
-2. Deploy the container to your infrastructure (Kubernetes, ECS, etc.)
+2. Run the container:
+   ```bash
+   docker run -p 3000:3000 backend-service-example
+   ```
 
-3. Configure the load balancer to route traffic with the path prefix `/my-service/*` to the container
+### Manual Deployment
+
+1. Build the project:
+   ```bash
+   npm run build
+   ```
+
+2. Start the service:
+   ```bash
+   npm start
+   ```
+
+The service will be available at `http://localhost:3000`
+
+## Configuration
+
+- **Port**: The service runs on port 3000 by default
+- **Environment Variables**: Add environment variables as needed for your specific deployment
 
 ## CI/CD Pipeline
 
-The GitHub Actions workflow:
+The GitHub Actions workflow automatically:
 
-1. Triggers on pull requests
-2. Identifies directories with Dockerfiles that have been modified
-3. For each modified service:
-   - Installs dependencies
-   - Runs tests
-   - Builds the Docker image (on merge to main)
-
-## Load Balancer Configuration
-
-The application load balancer should be configured with path-based routing:
-
-- Path pattern: `/service-name/*`
-- Target: Service container for `service-name`
-- Path rewrite: Strip `/service-name` prefix (implementation depends on your load balancer)
-
-## Best Practices
-
-- Each service should be self-contained
-- Use the standard middleware for consistent request handling
-- Implement thorough tests for each service
-- Document API endpoints in each service's README
+1. Triggers on pull requests to main
+2. Installs dependencies
+3. Runs tests
+4. Builds the Docker image (on merge to main)
 
 ## License
 
-[Include license information here]
+This project is licensed under the GNU General Public License v2.0. See the [LICENSE](LICENSE) file for details.
