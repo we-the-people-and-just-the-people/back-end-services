@@ -132,12 +132,32 @@ The service will be available at `http://localhost:3000`
 
 The GitHub Actions workflows automatically:
 
-1. **Pull Request Workflow**: Triggers on pull requests to main
-   - Installs dependencies
-   - Runs tests
-2. **Docker Build Workflow**: Triggers on push to main
-   - Builds the application
-   - Builds and pushes Docker image to ghcr.io
+### Pull Request Workflow
+1. Triggers on pull requests to main
+2. Installs dependencies
+3. Runs tests
+4. Builds the Docker image (on merge to main)
+
+### Release Workflow
+1. Triggers manually via GitHub Actions workflow dispatch
+2. Provides dropdown options to increment Major, Minor, or Patch version
+3. Installs dependencies and builds the project
+4. Runs tests to ensure quality
+5. Automatically increments the selected version part in package.json
+6. Creates and pushes a new semantic version tag
+7. Creates a GitHub release with auto-generated changelog
+
+To create a new release:
+1. Go to the **Actions** tab in the GitHub repository
+2. Select the **Create Release** workflow
+3. Click **Run workflow**
+4. Choose the version increment type:
+   - **Major**: For breaking changes (1.0.0 → 2.0.0)
+   - **Minor**: For new features (1.0.0 → 1.1.0)
+   - **Patch**: For bug fixes (1.0.0 → 1.0.1)
+5. Click **Run workflow** to start the process
+
+**Note**: This workflow is restricted to authorized users only.
 
 ## License
 
