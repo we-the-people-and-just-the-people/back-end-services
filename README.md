@@ -139,16 +139,25 @@ The GitHub Actions workflows automatically:
 4. Builds the Docker image (on merge to main)
 
 ### Release Workflow
-1. Triggers on semantic version tags (e.g., `v1.0.0`, `v2.1.3`)
-2. Installs dependencies and builds the project
-3. Runs tests to ensure quality
-4. Automatically creates a GitHub release with changelog
+1. Triggers manually via GitHub Actions workflow dispatch
+2. Provides dropdown options to increment Major, Minor, or Patch version
+3. Installs dependencies and builds the project
+4. Runs tests to ensure quality
+5. Automatically increments the selected version part in package.json
+6. Creates and pushes a new semantic version tag
+7. Creates a GitHub release with auto-generated changelog
 
 To create a new release:
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
+1. Go to the **Actions** tab in the GitHub repository
+2. Select the **Create Release** workflow
+3. Click **Run workflow**
+4. Choose the version increment type:
+   - **Major**: For breaking changes (1.0.0 → 2.0.0)
+   - **Minor**: For new features (1.0.0 → 1.1.0)
+   - **Patch**: For bug fixes (1.0.0 → 1.0.1)
+5. Click **Run workflow** to start the process
+
+**Note**: This workflow is restricted to authorized users only.
 
 ## License
 
