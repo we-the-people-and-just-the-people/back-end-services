@@ -1,6 +1,7 @@
+---
 name: Create Release
 
-on:
+'on':
   push:
     tags:
       - 'v*.*.*'
@@ -11,7 +12,7 @@ permissions:
 jobs:
   create-release:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -40,12 +41,12 @@ jobs:
           name: Release ${{ github.ref_name }}
           body: |
             ## Changes in ${{ github.ref_name }}
-            
+
             This release was automatically created from the git tag ${{ github.ref_name }}.
-            
+
             ### What's Changed
             - See the commit history for detailed changes since the last release
-            
+
             **Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ github.ref_name }}...HEAD
           draft: false
           prerelease: false
