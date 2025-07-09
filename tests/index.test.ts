@@ -79,10 +79,33 @@ describe('Koa Application', () => {
         process.emit('SIGINT');
 
         expect(mockConsoleLog).toHaveBeenCalledWith('Time to shut down gracefully!');
+        expect(mockConsoleLog).toHaveBeenCalledWith('All requests completed, shutting down...');
         expect(mockExit).toHaveBeenCalledWith(0);
 
         // Restore mocks
         mockExit.mockRestore();
         mockConsoleLog.mockRestore();
+    });
+
+    it('should respond with 200 status for liveness endpoint', async () => {
+        const response = await request(app.callback()).get('/liveness');
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('status', 'ok');
+        expect(response.body).toHaveProperty('timestamp');
+    });
+
+    it('should track active request IDs', async () => {
+        const { activeRequestIds } = await import('../src/app');
+        
+        // Clear any existing request IDs
+        activeRequestIds.clear();
+        
+        // Make a request that should add to active requests
+        const response = await request(app.callback()).get('/');
+        
+        // By the time the response is received, the request should be completed
+        // and removed from active requests
+        expect(response.status).toBe(200);
+        expect(activeRequestIds.size).toBe(0);
     });
 });

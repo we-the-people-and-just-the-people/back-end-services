@@ -7,7 +7,8 @@ const router = new Router({
 
 router
     .get('/', helloWorld)
-    .get('/hello', helloWorldFromPath);
+    .get('/hello', helloWorldFromPath)
+    .get('/liveness', livenessProbe);
 
 /**
  * This function sets the response to a simple test.
@@ -37,6 +38,23 @@ async function helloWorldFromPath(ctx: Context, next: Next) {
     };
 
     ctx.log.info("This is a log message from the helloWorldFromPath function.");
+
+    await next();
+}
+
+/**
+ * Kubernetes liveness probe endpoint.
+ *
+ * @param {Context} ctx - The context of the request.
+ * @param {Next} next - The next function to be executed.
+ */
+async function livenessProbe(ctx: Context, next: Next) {
+    ctx.body = {
+        status: 'ok',
+        timestamp: new Date().toISOString()
+    };
+
+    ctx.log.info("Liveness probe check completed.");
 
     await next();
 }

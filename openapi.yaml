@@ -197,6 +197,40 @@ paths:
                 type: string
                 example: "Method Not Allowed"
 
+  /liveness:
+    get:
+      summary: Kubernetes Liveness Probe
+      description: Health check endpoint for Kubernetes liveness probes. Returns service status and timestamp.
+      operationId: livenessProbe
+      tags:
+        - health
+      responses:
+        '200':
+          description: Service is alive and healthy
+          headers:
+            X-Request-Id:
+              description: Unique request identifier
+              schema:
+                type: string
+                format: uuid
+                example: "cf3f487f-47ba-47e1-acb1-e340364f3e52"
+            X-Response-Time:
+              description: Response time in milliseconds
+              schema:
+                type: string
+                pattern: '^\d+ms$'
+                example: "1ms"
+            X-Request-Timestamp:
+              description: ISO 8601 timestamp of the request
+              schema:
+                type: string
+                format: date-time
+                example: "2025-07-09T16:05:41.803Z"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LivenessResponse'
+
 components:
   schemas:
     HelloWorldResponse:
@@ -220,6 +254,24 @@ components:
         - message
       example:
         message: "Hello World from /hello"
+
+    LivenessResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the service
+          enum: [ok]
+        timestamp:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the probe was executed
+      required:
+        - status
+        - timestamp
+      example:
+        status: "ok"
+        timestamp: "2025-07-09T16:33:19.496Z"
 
     Error:
       type: object
@@ -287,3 +339,5 @@ components:
 tags:
   - name: hello
     description: Hello World endpoints
+  - name: health
+    description: Health check and monitoring endpoints
