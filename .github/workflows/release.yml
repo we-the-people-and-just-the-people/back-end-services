@@ -133,18 +133,14 @@ jobs:
         with:
           tag_name: v${{ steps.new_version.outputs.new_version }}
           name: Release v${{ steps.new_version.outputs.new_version }}
+          generate_release_notes: true
           body: |
-            ## Changes in v${{ steps.new_version.outputs.new_version }}
+            ## Release Information
 
             This release was automatically created by incrementing the ${{ inputs.version_increment }} version.
 
             **Previous version**: v${{ steps.current_version.outputs.version }}
             **New version**: v${{ steps.new_version.outputs.new_version }}
             **Increment type**: ${{ inputs.version_increment }}
-
-            ### What's Changed
-            - See the commit history for detailed changes since the last release
-
-            **Full Changelog**: https://github.com/${{ github.repository }}/compare/v${{ steps.current_version.outputs.version }}...v${{ steps.new_version.outputs.new_version }}
           draft: false
           prerelease: false
