@@ -1,0 +1,289 @@
+openapi: 3.0.3
+info:
+  title: We The People and Just The People - Backend Service Example
+  description: |
+    This is a single microservice built with Node.js, TypeScript, and Koa framework. 
+    It serves as an example backend service for the We The People and Just The People project.
+    
+    The service provides simple "Hello World" endpoints for testing and demonstration purposes.
+  version: 0.0.1
+  license:
+    name: GNU General Public License v2.0
+    url: https://www.gnu.org/licenses/gpl-2.0.html
+  contact:
+    name: We The People and Just The People
+    url: https://github.com/we-the-people-and-just-the-people
+
+servers:
+  - url: http://localhost:3000
+    description: Development server
+
+paths:
+  /:
+    get:
+      summary: Hello World
+      description: Returns a simple "Hello World" message
+      operationId: helloWorld
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Request-Id:
+              description: Unique request identifier
+              schema:
+                type: string
+                format: uuid
+                example: "cf3f487f-47ba-47e1-acb1-e340364f3e52"
+            X-Response-Time:
+              description: Response time in milliseconds
+              schema:
+                type: string
+                pattern: '^\d+ms$'
+                example: "1ms"
+            X-Request-Timestamp:
+              description: ISO 8601 timestamp of the request
+              schema:
+                type: string
+                format: date-time
+                example: "2025-07-09T16:05:41.803Z"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Hello World"
+                required:
+                  - message
+        '404':
+          description: Not found
+          headers:
+            X-Request-Id:
+              description: Unique request identifier
+              schema:
+                type: string
+                format: uuid
+            X-Response-Time:
+              description: Response time in milliseconds
+              schema:
+                type: string
+                pattern: '^\d+ms$'
+            X-Request-Timestamp:
+              description: ISO 8601 timestamp of the request
+              schema:
+                type: string
+                format: date-time
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Not Found"
+        '405':
+          description: Method not allowed
+          headers:
+            X-Request-Id:
+              description: Unique request identifier
+              schema:
+                type: string
+                format: uuid
+            X-Response-Time:
+              description: Response time in milliseconds
+              schema:
+                type: string
+                pattern: '^\d+ms$'
+            X-Request-Timestamp:
+              description: ISO 8601 timestamp of the request
+              schema:
+                type: string
+                format: date-time
+            Allow:
+              description: Allowed HTTP methods
+              schema:
+                type: string
+                example: "HEAD, GET"
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Method Not Allowed"
+
+  /hello:
+    get:
+      summary: Hello World from Path
+      description: Returns a "Hello World" message with the request path
+      operationId: helloWorldFromPath
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Request-Id:
+              description: Unique request identifier
+              schema:
+                type: string
+                format: uuid
+                example: "cf3f487f-47ba-47e1-acb1-e340364f3e52"
+            X-Response-Time:
+              description: Response time in milliseconds
+              schema:
+                type: string
+                pattern: '^\d+ms$'
+                example: "1ms"
+            X-Request-Timestamp:
+              description: ISO 8601 timestamp of the request
+              schema:
+                type: string
+                format: date-time
+                example: "2025-07-09T16:05:41.803Z"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Hello World from /hello"
+                required:
+                  - message
+        '404':
+          description: Not found
+          headers:
+            X-Request-Id:
+              description: Unique request identifier
+              schema:
+                type: string
+                format: uuid
+            X-Response-Time:
+              description: Response time in milliseconds
+              schema:
+                type: string
+                pattern: '^\d+ms$'
+            X-Request-Timestamp:
+              description: ISO 8601 timestamp of the request
+              schema:
+                type: string
+                format: date-time
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Not Found"
+        '405':
+          description: Method not allowed
+          headers:
+            X-Request-Id:
+              description: Unique request identifier
+              schema:
+                type: string
+                format: uuid
+            X-Response-Time:
+              description: Response time in milliseconds
+              schema:
+                type: string
+                pattern: '^\d+ms$'
+            X-Request-Timestamp:
+              description: ISO 8601 timestamp of the request
+              schema:
+                type: string
+                format: date-time
+            Allow:
+              description: Allowed HTTP methods
+              schema:
+                type: string
+                example: "HEAD, GET"
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Method Not Allowed"
+
+components:
+  schemas:
+    HelloWorldResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The hello world message
+      required:
+        - message
+      example:
+        message: "Hello World"
+
+    HelloWorldFromPathResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The hello world message with request path
+      required:
+        - message
+      example:
+        message: "Hello World from /hello"
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+      required:
+        - error
+
+  responses:
+    NotFound:
+      description: The requested resource was not found
+      headers:
+        X-Request-Id:
+          description: Unique request identifier
+          schema:
+            type: string
+            format: uuid
+        X-Response-Time:
+          description: Response time in milliseconds
+          schema:
+            type: string
+            pattern: '^\d+ms$'
+        X-Request-Timestamp:
+          description: ISO 8601 timestamp of the request
+          schema:
+            type: string
+            format: date-time
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: "Not Found"
+
+    MethodNotAllowed:
+      description: The HTTP method is not allowed for this resource
+      headers:
+        X-Request-Id:
+          description: Unique request identifier
+          schema:
+            type: string
+            format: uuid
+        X-Response-Time:
+          description: Response time in milliseconds
+          schema:
+            type: string
+            pattern: '^\d+ms$'
+        X-Request-Timestamp:
+          description: ISO 8601 timestamp of the request
+          schema:
+            type: string
+            format: date-time
+        Allow:
+          description: Allowed HTTP methods
+          schema:
+            type: string
+            example: "HEAD, GET"
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: "Method Not Allowed"
+
+tags:
+  - name: hello
+    description: Hello World endpoints
