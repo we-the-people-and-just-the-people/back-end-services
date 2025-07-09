@@ -1,6 +1,6 @@
 {
   "name": "backend-service-example",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "We The People and Just The People - Backend Service Example",
   "dependencies": {
     "@koa/bodyparser": "^5.1.1",
