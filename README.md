@@ -27,6 +27,7 @@ backend-service-example/
 │   └── index.test.ts       # Main app tests
 ├── .github/workflows/      # CI/CD workflows
 ├── Dockerfile              # Container definition
+├── openapi.yaml            # OpenAPI 3.0 specification
 ├── package.json            # Dependencies and scripts
 ├── tsconfig.json           # TypeScript configuration
 ├── jest.config.js          # Jest testing configuration
@@ -86,6 +87,18 @@ The service provides the following endpoints:
 
 - `GET /` - Returns a simple "Hello World" message
 - `GET /hello` - Returns a "Hello World" message with the request path
+
+## API Documentation
+
+The API is documented using OpenAPI 3.0 specification. The specification file is located at `openapi.yaml` in the root directory.
+
+The specification includes:
+- Complete endpoint documentation
+- Request/response schemas
+- Custom headers (X-Request-Id, X-Response-Time, X-Request-Timestamp)
+- Error responses (404, 405)
+
+You can use tools like [Swagger UI](https://swagger.io/tools/swagger-ui/) or [Redoc](https://redocly.github.io/redoc/) to visualize and interact with the API documentation.
 
 ## Testing
 
