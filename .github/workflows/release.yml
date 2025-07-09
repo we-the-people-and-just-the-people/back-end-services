@@ -46,9 +46,12 @@ jobs:
       - name: Get current version
         id: current_version
         run: |
-          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          # Get the latest tag, fallback to 0.0.0 if no tags exist
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          # Remove the 'v' prefix if it exists
+          CURRENT_VERSION=${LATEST_TAG#v}
           echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          echo "Current version: $CURRENT_VERSION"
+          echo "Current version (from latest tag): $CURRENT_VERSION"
 
       - name: Calculate new version
         id: new_version
@@ -100,6 +103,21 @@ jobs:
         run: |
           NEW_VERSION="${{ steps.new_version.outputs.new_version }}"
           TAG_NAME="v$NEW_VERSION"
+          
+          # Check if tag already exists locally
+          if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+            echo "Warning: Tag $TAG_NAME already exists locally. Deleting it."
+            git tag -d "$TAG_NAME"
+          fi
+          
+          # Check if tag exists remotely
+          if git ls-remote --exit-code --tags origin "$TAG_NAME" >/dev/null 2>&1; then
+            echo "Error: Tag $TAG_NAME already exists in remote repository."
+            echo "This suggests the release workflow may have been run multiple times."
+            echo "Please check the existing releases and tags before proceeding."
+            exit 1
+          fi
+          
           git tag $TAG_NAME
           git push origin $TAG_NAME
           echo "Created and pushed tag: $TAG_NAME"
